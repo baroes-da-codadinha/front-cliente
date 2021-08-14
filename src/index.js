@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import Rotas from './Rotas';
+import './styles/global.css';
+
 
 ReactDOM.render(
   <React.StrictMode>

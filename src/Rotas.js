@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import useAuth from './hooks/useAuth';
+import Login from './pages/Login';
 
 function RotasProtegidas(props) {
   const { token } = useAuth();
@@ -23,7 +24,7 @@ function Rotas() {
     <AuthProvider>
       <Router>
         <Switch>
-          <Route path="/"/>
+          <Route path="/" exact component={Login}/>
           <Route path="/cadastro"/>
           <RotasProtegidas>
             <Route path="/produtos"/>
