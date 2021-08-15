@@ -12,9 +12,27 @@ import './styles.css';
 export default function Login() {
   const [mensagem, setMensagem] = useState('');
   const [openSnack, setOpenSnack] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState, clearErrors } = useForm();
   const { logar } = useAuth();
   const history = useHistory();
+
+  useEffect(() => {
+    setMensagem({ texto: '', status: '' });
+    setOpenSnack(false);
+    const { email, senha } = formState.errors;
+    if(email){
+      setMensagem({ texto: email.message, status: 'erro' });
+      setOpenSnack(true);
+      return;
+    }
+
+    if(senha){
+      setMensagem({ texto: senha.message, status: 'erro' });
+      setOpenSnack(true);
+      return;
+    }
+
+  }, [formState, clearErrors])
 
   async function onSubmit(data) {
     try {
@@ -50,11 +68,15 @@ export default function Login() {
         <form onSubmit ={handleSubmit(onSubmit)}>
           <InputTexto
             label="Email"
-            {...register('email', { required: true, minLength: 3, })}
+            {...register('email',
+            { required: 'Email é um campo obrigatório',
+            minLength: { value: 3, message: 'Email inválido'}, })}
           />
           <InputSenha
             label="Senha"
-            {...register('senha', { required: true, minLength: 5, })}
+            {...register('senha',
+            { required: 'Senha é um campo obrigatório',
+            minLength: { value: 5, message: 'A senha deverá ter pelo menos cinco caracteres'}, })}
           />
           <div className="button-box">
             <button

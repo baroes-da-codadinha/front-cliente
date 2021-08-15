@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import { get } from '../../services/ApiClient';
 import './styles.css';
-import ModalEditarUsuario from '../ModalEditarUsuario';
 import Avatar from '../../assets/avatar.png';
 import Illustration from '../../assets/illustration-3.svg';
 import Snackbar from '../Snackbar';
@@ -40,43 +39,32 @@ export default function Cabecalho() {
 
   return (
     <div>
-      {
-        dadosUsuario && (
-          <>
-            {modalEditarUsuario && (
-              <ModalEditarUsuario
-                dadosUsuario={dadosUsuario}
-                setModalEditarUsuario={setModalEditarUsuario}
-              />
-            )}
-            <div
-              className="imagem-cabecalho"
-              style={{ backgroundImage: `url(${dadosUsuario && dadosUsuario.categoria.url_imagem})` }}
-            />
-            <img className="dash-ilustracao" src={Illustration} alt="" />
-            <div className="avatar-borda">
-              <img
-                className="avatar"
-                src={dadosUsuario.restaurante.url_imagem || Avatar}
-                alt="avatar"
-                onClick={() => setModalEditarUsuario(true)}
-              />
-            </div>
-            <div className="localizar-titulo">
-              <span className="titulo sombreado">
-                {dadosUsuario.restaurante.nome}
-              </span>
-              <button
-                className="botao-logout sombreado"
-                type="button"
-                onClick={() => logout()}
-              >
-                Logout
-              </button>
-            </div>
-          </>
-        )
-      }
+      <div
+        className="imagem-cabecalho"
+        style={{ backgroundImage: `url(${dadosUsuario && dadosUsuario.categoria.url_imagem})` }}
+      />
+      <img className="dash-ilustracao" src={Illustration} alt="" />
+      <div className="avatar-borda">
+        <img
+          className="avatar"
+          src={dadosUsuario.restaurante.url_imagem || Avatar}
+          alt="avatar"
+          onClick={() => setModalEditarUsuario(true)}
+        />
+      </div>
+      <div className="localizar-titulo">
+        <span className="titulo sombreado">
+          {dadosUsuario.restaurante.nome}
+        </span>
+        <button
+          className="botao-logout sombreado"
+          type="button"
+          onClick={() => logout()}
+        >
+          Logout
+        </button>
+      </div>
+      )
       <Snackbar
         erro={erro}
         openSnack={openSnack}

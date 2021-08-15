@@ -11,13 +11,13 @@ export default function Snackbar({ openSnack, setOpenSnack, mensagem }) {
       >
         {openSnack && (
           <>
-            <div className="icone-alerta">
+            <div className="icone-alerta noselect">
               <img
                 src={mensagem && mensagem.status === 'erro' && WarnIcon}
                 alt=""
               />
             </div>
-            <span>
+            <span className="noselect">
               {mensagem && mensagem.texto}
             </span>
           </>

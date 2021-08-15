@@ -8,6 +8,8 @@ import {
 import { AuthProvider } from './context/AuthContext';
 import useAuth from './hooks/useAuth';
 import Login from './pages/Login';
+import Cadastro from './pages/Cadastro';
+import Dashboard from './pages/Dashboard'
 
 function RotasProtegidas(props) {
   const { token } = useAuth();
@@ -25,9 +27,9 @@ function Rotas() {
       <Router>
         <Switch>
           <Route path="/" exact component={Login}/>
-          <Route path="/cadastro"/>
+          <Route path="/cadastro" exact component={Cadastro}/>
           <RotasProtegidas>
-            <Route path="/produtos"/>
+            <Route path="/produtos" exact component={Dashboard}/>
           </RotasProtegidas>
         </Switch>
       </Router>
