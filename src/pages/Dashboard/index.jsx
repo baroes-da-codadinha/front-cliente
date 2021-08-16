@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
-import useAuth from '../../hooks/useAuth';
 import { get, post } from '../../services/ApiClient';
 import './styles.css';
 import Cabecalho from '../../components/Cabecalho';
@@ -30,9 +29,7 @@ export default function Dashboard() {
         setOpenSnack(true);
       }
     }
-    if (busca) {
-      buscarRestaurantes()
-    }
+    buscarRestaurantes();
   }, [busca])
 
 
@@ -49,7 +46,8 @@ export default function Dashboard() {
         const arrayProdutos = await resposta.json();
 
         if (arrayProdutos.length === 0) {
-          setMensagem({ texto: "Não foram encontrador produtos para este restaurante.", status: 'erro' });
+          setMensagem({ texto: "Não foram encontrador produtos para este restaurante.",
+           status: 'erro' });
           setOpenSnack(true);
           setProdutos();
           return;
