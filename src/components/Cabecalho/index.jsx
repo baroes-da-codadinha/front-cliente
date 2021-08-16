@@ -12,7 +12,6 @@ export default function Cabecalho() {
   const { token, deslogar } = useAuth();
 
   const [dadosUsuario, setDadosUsuario] = useState('');
-  const [modalEditarUsuario, setModalEditarUsuario] = useState(false);
   // const [usuarioEditado, setUsuarioEditado] = useState(null);
 
   const [erro, setMensagem] = useState('');
@@ -41,20 +40,18 @@ export default function Cabecalho() {
     <div>
       <div
         className="imagem-cabecalho"
-        style={{ backgroundImage: `url(${dadosUsuario && dadosUsuario.categoria.url_imagem})` }}
       />
       <img className="dash-ilustracao" src={Illustration} alt="" />
       <div className="avatar-borda">
         <img
           className="avatar"
-          src={dadosUsuario.restaurante.url_imagem || Avatar}
+          src={Avatar}
           alt="avatar"
-          onClick={() => setModalEditarUsuario(true)}
         />
       </div>
       <div className="localizar-titulo">
         <span className="titulo sombreado">
-          {dadosUsuario.restaurante.nome}
+          Título sombreado
         </span>
         <button
           className="botao-logout sombreado"

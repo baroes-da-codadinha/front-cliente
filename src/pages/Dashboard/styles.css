@@ -10,7 +10,10 @@
     height: 15vh;
 }
 
-.sub-cabecalho button {
+.sub-cabecalho input {
+    position: relative;
+    z-index: 8;
+    width: 27vw;
     margin-right: 18vw;
 }
 
@@ -36,9 +39,10 @@
     display: flex;
 }
 
-.vazio button {
-    margin-right: 0;
-    margin-top: 3rem;
+.vazio input {
+    margin-top: -15vh;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .container-produtos {

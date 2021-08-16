@@ -1,4 +1,5 @@
 .imagem-cabecalho {
+    background-image: url("../../assets/bg-pizzaria.png");
     background-color: rgba(0, 0, 0, 0);
     height: 32vh;
     width: 100vw;

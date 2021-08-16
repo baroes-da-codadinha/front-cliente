@@ -6,77 +6,62 @@ import './styles.css';
 import Cabecalho from '../../components/Cabecalho';
 import Card from '../../components/Card';
 import Snackbar from '../../components/Snackbar';
+import InputBusca from '../../components/InputBusca';
 
 export default function Dashboard() {
-  const { token } = useAuth();
-
-  const [produtos, setProdutos] = useState([]);
-
-  const [modalCadastrarProduto, setModalCadastrarProduto] = useState(false);
-  const [modalEditarProduto, setModalEditarProduto] = useState(false);
-  const [produtoEditado, setProdutoEditado] = useState(null);
-  const [cadastroProduto, setCadastroProduto] = useState(null);
-
+  const [busca, setBusca] = useState('');
   const [mensagem, setMensagem] = useState('');
   const [openSnack, setOpenSnack] = useState(false);
+  const { token } = useAuth();
 
-  async function onLoad() {
-    try {
-      const resposta = await get('produtos', token);
-
-      if (resposta) {
-        const arrayProdutos = await resposta.json();
-        if (arrayProdutos.length === 0) {
-          setProdutos();
-          return;
-        }
-        setProdutos(arrayProdutos);
-        return;
-      }
-    } catch (error) {
-      setMensagem({ texto: error.message, status: 'erro' });
-    }
-  }
+  const [produtos, setProdutos] = useState('');
 
   useEffect(() => {
-    onLoad();
-  }, [produtos]);
+
+    try {
+      get('restaurantes', busca).then(data => {
+        
+      })
+      
+    } catch (error) {
+      setMensagem({ texto: error.message, status: 'erro' });
+      setOpenSnack(true);
+    }
+
+  }, [busca])
+
 
   return (
     <div>
-      <div className={modalCadastrarProduto && 'blurry'}>
-        <Cabecalho />
-        <div className={`sub-cabecalho ${!produtos && 'vazio'}`}>
-          <div>
-            <span>
-              Você ainda não tem nenhum produto no seu cardápio.
-              <br />
-              Gostaria de adicionar um novo produto?
-            </span>
-          </div>
-          <button
-            className="aceitar"
-            type="button"
-            onClick={() => setModalCadastrarProduto(true)}
-          >
-            Adicionar produto ao cardápio
-          </button>
+      <Cabecalho />
+      <div className={`sub-cabecalho ${!produtos && 'vazio'}`}>
+        <div>
+          <span>
+            Bem vindo!<br />
+            Vamos pedir um ranguinho?
+          </span>
         </div>
+        <form>
+          <InputBusca
+          value={busca}
+          setValue={setBusca}
+              />
+        </form>
+      </div>
         {produtos && (
           <div className="container-produtos">
             {
               produtos.map((produto) => (
-                <Card key={produto.id} produto={produto} setModalEditarProduto={setModalEditarProduto} setProdutoEditado={setProdutoEditado} />
+                <Card key={produto.id} produto={produto} />
               ))
             }
           </div>
         )}
+        <Snackbar
+          mensagem={mensagem}
+          openSnack={openSnack}
+          setOpenSnack={setOpenSnack}
+        />
       </div>
-      <Snackbar
-        mensagem={mensagem}
-        openSnack={openSnack}
-        setOpenSnack={setOpenSnack}
-      />
-    </div>
-  );
+      );
 }
