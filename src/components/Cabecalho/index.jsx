@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import './styles.css';
@@ -11,13 +11,10 @@ export default function Cabecalho() {
   const history = useHistory();
   const { token, deslogar } = useAuth();
 
-  // const [usuarioEditado, setUsuarioEditado] = useState(null);
-
   const [erro, setMensagem] = useState('');
   const [openSnack, setOpenSnack] = useState(false);
 
   function logout() {
-    history.push('/');
     deslogar();
   }
   return (

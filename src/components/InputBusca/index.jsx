@@ -27,7 +27,7 @@ export default function InputBusca({
       <div className="search-box">
       { ['um', 'dois', 'tres', 'quatro'].map(item => (
        <div className="search-item">
-         item
+         {item}
        </div>
      ))
       }

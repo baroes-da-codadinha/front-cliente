@@ -19,6 +19,8 @@
 
 .sub-cabecalho span {
     display: none;
+    margin-top: 12vh;
+    margin-bottom: 5vh;
 }
 
 .vazio {
@@ -29,7 +31,6 @@
 }
 
 .vazio div {
-    margin-top: 20vh;
     font-size: 1.6rem;
     color: var(--cinza-medio);
     text-align: center;
@@ -40,7 +41,6 @@
 }
 
 .vazio input {
-    margin-top: -15vh;
     margin-left: auto;
     margin-right: auto;
 }
