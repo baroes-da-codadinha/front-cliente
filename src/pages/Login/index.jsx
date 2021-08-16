@@ -12,13 +12,11 @@ import './styles.css';
 export default function Login() {
   const [mensagem, setMensagem] = useState('');
   const [openSnack, setOpenSnack] = useState(false);
-  const { register, handleSubmit, formState, clearErrors } = useForm();
+  const { register, handleSubmit, formState } = useForm();
   const { logar } = useAuth();
   const history = useHistory();
 
   useEffect(() => {
-    setMensagem({ texto: '', status: '' });
-    setOpenSnack(false);
     const { email, senha } = formState.errors;
     if(email){
       setMensagem({ texto: email.message, status: 'erro' });
@@ -32,14 +30,16 @@ export default function Login() {
       return;
     }
 
-  }, [formState, clearErrors])
+  }, [formState])
 
   async function onSubmit(data) {
     try {
       const resposta = await post('login-consumidor', data);
 
       if (!resposta.ok) {
+
         const msg = await resposta.json();
+        console.log(msg)
 
         setMensagem({ texto: msg, status: 'erro' });
         setOpenSnack(true);
