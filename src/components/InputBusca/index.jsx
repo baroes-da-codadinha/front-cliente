@@ -2,12 +2,8 @@ import React from 'react';
 import './styles.css';
 
 export default function InputBusca({
-  placeholder, value, setValue, array, setArray
+  placeholder, value, setValue, array, selecionarItem
 }) {
-  function selecionarItem(item) {
-    setValue('')
-    setArray([]);
-  }
   return (
     <div className="flex-column input-search">
       <input
@@ -17,7 +13,7 @@ export default function InputBusca({
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />
-      {value && array.length > 0 && (
+      {array.length > 0 && (
         <div className="search-box">
           {array.map(item => (
             <div

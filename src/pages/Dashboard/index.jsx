@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import useAuth from '../../hooks/useAuth';
-import { post } from '../../services/ApiClient';
+import { get, post } from '../../services/ApiClient';
 import './styles.css';
 import Cabecalho from '../../components/Cabecalho';
 import Card from '../../components/Card';
@@ -12,7 +12,6 @@ export default function Dashboard() {
   const [busca, setBusca] = useState('');
   const [mensagem, setMensagem] = useState('');
   const [openSnack, setOpenSnack] = useState(false);
-  const { token } = useAuth();
 
   const [produtos, setProdutos] = useState('');
   const [restaurantes, setRestaurantes] = useState('');
@@ -21,7 +20,7 @@ export default function Dashboard() {
   useEffect(() => {
     async function buscarRestaurantes() {
       try {
-        const resposta = await post('restaurantes',{ busca });
+        const resposta = await post('restaurantes', { busca });
 
         const lista = await resposta.json();
 
@@ -31,10 +30,37 @@ export default function Dashboard() {
         setOpenSnack(true);
       }
     }
-    if(busca){
+    if (busca) {
       buscarRestaurantes()
     }
   }, [busca])
+
+
+
+
+  async function selecionarItem(item) {
+    try {
+      const resposta = await get(`restaurantes/${item.id}`);
+
+      setBusca('')
+      setRestaurantes([]);
+
+      if (resposta) {
+        const arrayProdutos = await resposta.json();
+
+        if (arrayProdutos.length === 0) {
+          setProdutos();
+          return;
+        }
+        setProdutos(arrayProdutos);
+        return;
+      }
+
+    } catch (error) {
+      setMensagem({ texto: error.message, status: 'erro' });
+      setOpenSnack(true);
+    }
+  }
 
 
   return (
@@ -49,27 +75,27 @@ export default function Dashboard() {
         </div>
         <form>
           <InputBusca
-          value={busca}
-          setValue={setBusca}
-          array={restaurantes}
-          setArray={setRestaurantes}
-              />
+            value={busca}
+            setValue={setBusca}
+            array={restaurantes}
+            selecionarItem={selecionarItem}
+          />
         </form>
       </div>
-        {produtos && (
-          <div className="container-produtos">
-            {
-              produtos.map((produto) => (
-                <Card key={produto.id} produto={produto} />
-              ))
-            }
-          </div>
-        )}
-        <Snackbar
-          mensagem={mensagem}
-          openSnack={openSnack}
-          setOpenSnack={setOpenSnack}
-        />
-      </div>
-      );
+      {produtos && (
+        <div className="container-produtos">
+          {
+            produtos.map((produto) => (
+              <Card key={produto.id} produto={produto} />
+            ))
+          }
+        </div>
+      )}
+      <Snackbar
+        mensagem={mensagem}
+        openSnack={openSnack}
+        setOpenSnack={setOpenSnack}
+      />
+    </div>
+  );
 }
