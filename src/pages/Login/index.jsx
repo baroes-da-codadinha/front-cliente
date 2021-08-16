@@ -36,7 +36,7 @@ export default function Login() {
 
   async function onSubmit(data) {
     try {
-      const resposta = await post('login', data);
+      const resposta = await post('login-consumidor', data);
 
       if (!resposta.ok) {
         const msg = await resposta.json();

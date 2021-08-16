@@ -1,1 +1,11 @@
+.input-search {
+    position: relative;
+}
 
+.search-box{
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+
+}

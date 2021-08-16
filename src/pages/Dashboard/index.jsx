@@ -20,7 +20,7 @@ export default function Dashboard() {
 
     try {
       get('restaurantes', busca).then(data => {
-        
+        console.log(data)
       })
       
     } catch (error) {

@@ -46,7 +46,7 @@ export default function Cadastro() {
 
   async function onSubmit(data) {
     try {
-      const resposta = await post('usuarios', data);
+      const resposta = await post('consumidor', data);
 
       if (!resposta.ok) {
         const msg = await resposta.json();
@@ -83,19 +83,19 @@ export default function Cadastro() {
               label="Email"
               {...register('email', 
               { required: 'Email é um campo obrigatório', 
-              minLength: 3, })}
+              minLength: { value: 3, message: 'Email inválido'},})}
             />
             <InputTexto
               label="Telefone"
               {...register('telefone', 
               { required: 'Telefone é um campo obrigatório', 
-              minLength: 8, })}
+              minLength: { value: 8, message: 'A senha deverá ter ao menos 8 caracteres'},})}
             />
             <InputSenha
               label="Senha"
               {...register('senha', 
               { required: 'Senha é um campo obrigatório', 
-              minLength: 5, })}
+              minLength: { value: 5, message: 'A senha deverá ter ao menos 5 caracteres'},})}
             />
             <InputSenha
               label="Repita a senha"
