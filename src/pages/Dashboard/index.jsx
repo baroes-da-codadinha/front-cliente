@@ -49,6 +49,8 @@ export default function Dashboard() {
         const arrayProdutos = await resposta.json();
 
         if (arrayProdutos.length === 0) {
+          setMensagem({ texto: "Não foram encontrador produtos para este restaurante.", status: 'erro' });
+          setOpenSnack(true);
           setProdutos();
           return;
         }
