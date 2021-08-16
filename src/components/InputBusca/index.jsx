@@ -1,19 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './styles.css';
 
 export default function InputBusca({
-   placeholder, value, setValue,
-}){
-
-  const [drop, setDrop] = useState(false);
-
-  function ativarDrop() {
-    setDrop(!drop);
-  }
-
-  function selecionarCategoria(item) {
-    setValue(item);
-    setDrop(false);
+  placeholder, value, setValue, array, setArray
+}) {
+  function selecionarItem(item) {
+    setValue('')
+    setArray([]);
   }
   return (
     <div className="flex-column input-search">
@@ -24,14 +17,18 @@ export default function InputBusca({
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />
-      <div className="search-box">
-      { ['um', 'dois', 'tres', 'quatro'].map(item => (
-       <div className="search-item">
-         {item}
-       </div>
-     ))
+      {value && array.length > 0 && (
+        <div className="search-box">
+          {array.map(item => (
+            <div
+              className="search-itens"
+              onClick={() => selecionarItem(item)}
+            >
+              {item.nome}
+            </div>
+          ))}
+        </div>)
       }
-      </div>
     </div>
   );
 }

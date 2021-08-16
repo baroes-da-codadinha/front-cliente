@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import useAuth from '../../hooks/useAuth';
-import { get } from '../../services/ApiClient';
+import { post } from '../../services/ApiClient';
 import './styles.css';
 import Cabecalho from '../../components/Cabecalho';
 import Card from '../../components/Card';
@@ -15,19 +15,25 @@ export default function Dashboard() {
   const { token } = useAuth();
 
   const [produtos, setProdutos] = useState('');
+  const [restaurantes, setRestaurantes] = useState('');
+
 
   useEffect(() => {
+    async function buscarRestaurantes() {
+      try {
+        const resposta = await post('restaurantes',{ busca });
 
-    try {
-      get('restaurantes', busca).then(data => {
-        console.log(data)
-      })
-      
-    } catch (error) {
-      setMensagem({ texto: error.message, status: 'erro' });
-      setOpenSnack(true);
+        const lista = await resposta.json();
+
+        setRestaurantes(lista);
+      } catch (error) {
+        setMensagem({ texto: error.message, status: 'erro' });
+        setOpenSnack(true);
+      }
     }
-
+    if(busca){
+      buscarRestaurantes()
+    }
   }, [busca])
 
 
@@ -45,6 +51,8 @@ export default function Dashboard() {
           <InputBusca
           value={busca}
           setValue={setBusca}
+          array={restaurantes}
+          setArray={setRestaurantes}
               />
         </form>
       </div>
