@@ -34,7 +34,7 @@ export default function Login() {
 
   async function onSubmit(data) {
     try {
-      const resposta = await post('login-consumidor', data);
+      const resposta = await post('login', data);
 
       if (!resposta.ok) {
 

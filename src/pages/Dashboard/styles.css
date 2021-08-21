@@ -23,28 +23,6 @@
     margin-bottom: 5vh;
 }
 
-.vazio {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-}
-
-.vazio div {
-    font-size: 1.6rem;
-    color: var(--cinza-medio);
-    text-align: center;
-}
-
-.vazio span {
-    display: flex;
-}
-
-.vazio input {
-    margin-left: auto;
-    margin-right: auto;
-}
-
 .container-produtos {
     background-color: var(--branco);
     padding: 8vh 8vw;

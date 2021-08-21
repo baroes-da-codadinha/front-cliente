@@ -1,38 +1,42 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { get, post } from '../../services/ApiClient';
+import useAuth from '../../hooks/useAuth';
 import './styles.css';
-import Cabecalho from '../../components/Cabecalho';
 import Card from '../../components/Card';
-import Snackbar from '../../components/Snackbar';
 import InputBusca from '../../components/InputBusca';
+import Cabecalho from '../../components/Cabecalho';
+import Snackbar from '../../components/Snackbar';
 
 export default function Dashboard() {
   const [busca, setBusca] = useState('');
   const [mensagem, setMensagem] = useState('');
   const [openSnack, setOpenSnack] = useState(false);
-
+  const { token } = useAuth()
   const [produtos, setProdutos] = useState('');
   const [restaurantes, setRestaurantes] = useState('');
 
+  async function buscarRestaurantes(busca) {
+    try {
+      const resposta = await post('restaurantes', { busca }, token);
+
+      const lista = await resposta.json();
+
+      setRestaurantes(lista);
+    } catch (error) {
+      setMensagem({ texto: error.message, status: 'erro' });
+      setOpenSnack(true);
+    }
+  }
 
   useEffect(() => {
-    async function buscarRestaurantes() {
-      try {
-        const resposta = await post('restaurantes', { busca });
-
-        const lista = await resposta.json();
-
-        setRestaurantes(lista);
-      } catch (error) {
-        setMensagem({ texto: error.message, status: 'erro' });
-        setOpenSnack(true);
-      }
-    }
     buscarRestaurantes();
+    console.log(restaurantes)
+  }, [])
+
+  useEffect(() => {
+    buscarRestaurantes(busca);
   }, [busca])
-
-
 
 
   async function selecionarItem(item) {
@@ -77,20 +81,16 @@ export default function Dashboard() {
           <InputBusca
             value={busca}
             setValue={setBusca}
-            array={restaurantes}
-            selecionarItem={selecionarItem}
           />
         </form>
       </div>
-      {produtos && (
-        <div className="container-produtos">
-          {
-            produtos.map((produto) => (
-              <Card key={produto.id} produto={produto} />
+      <div className="container-produtos">
+      {restaurantes && 
+            restaurantes.map((restaurante) => (
+              <Card key={restaurante.id} restaurante={restaurante} />
             ))
-          }
-        </div>
-      )}
+      }
+      </div>
       <Snackbar
         mensagem={mensagem}
         openSnack={openSnack}
