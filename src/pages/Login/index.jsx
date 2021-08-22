@@ -50,7 +50,7 @@ export default function Login() {
 
       logar(token);
 
-      history.push('/produtos');
+      history.push('/restaurantes');
     } catch (error) {
       setMensagem({ texto: error.message, status: 'erro' });
       setOpenSnack(true);

@@ -13,7 +13,7 @@ export default function Dashboard() {
   const [mensagem, setMensagem] = useState('');
   const [openSnack, setOpenSnack] = useState(false);
   const { token } = useAuth()
-  const [produtos, setProdutos] = useState('');
+  const [selecionado, setSelecionado] = useState('');
   const [restaurantes, setRestaurantes] = useState('');
 
   async function buscarRestaurantes(busca) {
@@ -31,63 +31,46 @@ export default function Dashboard() {
 
   useEffect(() => {
     buscarRestaurantes();
-    console.log(restaurantes)
   }, [])
 
   useEffect(() => {
     buscarRestaurantes(busca);
-  }, [busca])
+  }, [busca, buscarRestaurantes])
+  
 
 
   async function selecionarItem(item) {
-    try {
-      const resposta = await get(`restaurantes/${item.id}`);
-
-      setBusca('')
-      setRestaurantes([]);
-
-      if (resposta) {
-        const arrayProdutos = await resposta.json();
-
-        if (arrayProdutos.length === 0) {
-          setMensagem({ texto: "Não foram encontrador produtos para este restaurante.",
-           status: 'erro' });
-          setOpenSnack(true);
-          setProdutos();
-          return;
-        }
-        setProdutos(arrayProdutos);
-        return;
-      }
-
-    } catch (error) {
-      setMensagem({ texto: error.message, status: 'erro' });
-      setOpenSnack(true);
-    }
+    setSelecionado(item);
   }
 
 
   return (
     <div>
-      <Cabecalho />
-      <div className={`sub-cabecalho ${!produtos && 'vazio'}`}>
-        <div>
+      <Cabecalho 
+      restaurante={selecionado}
+      />
+      <div className="sub-cabecalho">
+        {selecionado ? (
           <span>
-            Bem vindo!<br />
-            Vamos pedir um ranguinho?
+            Selecionado
           </span>
-        </div>
+        ) :(
         <form>
           <InputBusca
             value={busca}
             setValue={setBusca}
           />
         </form>
+        )}
       </div>
       <div className="container-produtos">
       {restaurantes && 
             restaurantes.map((restaurante) => (
-              <Card key={restaurante.id} restaurante={restaurante} />
+              <Card 
+              key={restaurante.id} 
+              item={restaurante}
+              onClick={selecionarItem}
+              />
             ))
       }
       </div>

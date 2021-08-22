@@ -4,10 +4,14 @@ import useAuth from '../../hooks/useAuth';
 import './styles.css';
 import Avatar from '../../assets/avatar.png';
 import Illustration from '../../assets/illustration-3.svg';
+import HeadImagem from '../../assets/bg-pizzaria.png';
 import BarriLogo from '../../assets/barril-logo.png';
 import Snackbar from '../Snackbar';
 
-export default function Cabecalho() {
+export default function Cabecalho({ restaurante }) {
+  const {
+    nome, url_imagem: urlImagem, categoria,
+  } = restaurante;
   const history = useHistory();
   const { token, deslogar } = useAuth();
 
@@ -20,6 +24,7 @@ export default function Cabecalho() {
   return (
     <div>
       <div
+        style={{ backgroundImage: `url(${categoria ? categoria.url_imagem : HeadImagem})` }}
         className="imagem-cabecalho"
       />
       <img className="dash-ilustracao" src={Illustration} alt="" />
@@ -27,13 +32,13 @@ export default function Cabecalho() {
       <div className="avatar-borda">
         <img
           className="avatar"
-          src={Avatar}
+          src={restaurante ? urlImagem : Avatar}
           alt="avatar"
         />
       </div>
       <div className="localizar-titulo">
         <span className="titulo sombreado">
-          Restaurantes
+          {restaurante ? nome : 'Restaurantes'}
         </span>
         <button
           className="botao-logout sombreado"
