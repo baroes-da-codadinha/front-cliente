@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import './styles.css';
+import editarPreco from '../../functions/editarPreco';
 import IconFechar from '../../assets/x.svg';
 import IconCart from '../../assets/carrinho.svg';
 import Snackbar from '../Snackbar';
@@ -10,6 +11,7 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart }) {
   const array = [
     {
       "id": 2,
+      "quantidade": 1,
       "restaurante_id": 3,
       "nome": "Produto do Rodrigo",
       "descricao": "",
@@ -20,6 +22,7 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart }) {
     },
     {
       "id": 3,
+      "quantidade": 2,
       "restaurante_id": 3,
       "nome": "Outro produto do Rodrigo",
       "descricao": "",
@@ -60,11 +63,44 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart }) {
             </div>
             <div className="cartbox">
               {array.map((item) => (
-              <div className="mini-card">
-                <img src={item.url_imagem} alt={item.nome}/>
-
-              </div>
+                <div className="mini-card">
+                  <img src={item.url_imagem} alt={item.nome} />
+                  <div className="mini-detalhes">
+                    <div className="mini-nome">{item.nome}</div>
+                    <div className="mini-quantidade">{item.quantidade} unidade{item.quantidade > 1 && "s"}</div>
+                    <div className="mini-preco">{item && editarPreco(item.preco, true)}</div>
+                  </div>
+                </div>
               ))}
+            </div>
+            <div className="fim-pedido">
+              <div className="fim-subtotal">
+                <div className="txt-fim">
+                  Subtotal
+                </div>
+                <div className="txt-resto">
+                  {restaurante && editarPreco(restaurante.taxa_entrega, true)}
+                </div>
+              </div>
+              <div className="fim-taxa">
+                <div className="txt-fim">
+                  Taxa de entrega
+                </div>
+                <div className="txt-resto">
+                  {restaurante && editarPreco(restaurante.taxa_entrega, true)}
+                </div>
+              </div>
+              <div className="fim-total">
+                <div className="txt-fim">
+                  Total
+                </div>
+                <div className="txt-total">
+                  {restaurante && editarPreco(restaurante.taxa_entrega, true)}
+                </div>
+              </div>
+                <button className="aceitar">
+                  Confirmar pedido
+                </button>
             </div>
           </div>
           <Snackbar
