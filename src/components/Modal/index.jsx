@@ -3,12 +3,13 @@ import React, { useState } from 'react';
 import './styles.css';
 import useCart from '../../hooks/useCart';
 import IconFechar from '../../assets/x.svg';
+import IconCart from '../../assets/carrinho.svg';
 import IconCifrao from '../../assets/cifrao-icon.svg'
 import IconTempo from '../../assets/tempo-icon.svg'
 import editarPreco from '../../functions/editarPreco';
 import Snackbar from '../Snackbar';
 
-export default function Modal({ restaurante, produto, abrirModal, setAbrirModal }) {
+export default function Modal({ restaurante, produto, abrirModal, setAbrirModal, setAbrirCart }) {
   const [quantidade, setQuantidade] = useState(1)
   const [adicionado, setAdicionado] = useState(false)
   const { adicionarAoCarrinho } = useCart();
@@ -23,6 +24,18 @@ export default function Modal({ restaurante, produto, abrirModal, setAbrirModal 
     setQuantidade(1);
     setAdicionado(true)
   }
+
+  function fecharModal() {
+    setAdicionado(false);
+    setAbrirModal(false);
+  }
+
+  function irParaCarrinho() {
+    setAdicionado(false);
+    setAbrirModal(false);
+    setAbrirCart(true);
+  }
+
   return (
     <>
       {abrirModal && (
@@ -32,7 +45,7 @@ export default function Modal({ restaurante, produto, abrirModal, setAbrirModal 
               className="fechar"
               src={IconFechar}
               alt='fechar'
-              onClick={() => setAbrirModal(false)} />
+              onClick={() => fecharModal()} />
             <div className="img-produto-modal"
               style={{ backgroundImage: `url('${produto.url_imagem}')` }}
             />
@@ -44,8 +57,9 @@ export default function Modal({ restaurante, produto, abrirModal, setAbrirModal 
             <div className="detalhes-produto">
 
               {adicionado ? (
-                <div>
-                  teste
+                <div className="pedido-adicionado">
+                  <img src={IconCart} alt='carrinho' />
+                  <span>Pedido adicionado!</span>
                 </div>
               ) : (<>
                 <div className="nome-produto">{produto.nome}</div>
@@ -89,7 +103,7 @@ export default function Modal({ restaurante, produto, abrirModal, setAbrirModal 
                 </div>
               </>)}
               <div className="link-revisao">
-                Ir para a revisão do pedido
+                <span onClick={() => irParaCarrinho()}>Ir para a revisão do pedido</span>
               </div>
             </div>
           </div>

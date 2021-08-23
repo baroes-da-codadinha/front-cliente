@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { get, post } from '../../services/ApiClient';
 import useAuth from '../../hooks/useAuth';
 import './styles.css';
+import Carrinho from '../../components/Carrinho';
 import Card from '../../components/Card';
 import Modal from '../../components/Modal';
 import Subheader from '../../components/Subheader';
@@ -15,6 +16,8 @@ export default function Dashboard() {
   const [mensagem, setMensagem] = useState('');
   const [openSnack, setOpenSnack] = useState(false);
   const [abrirModal, setAbrirModal] = useState(false);
+  const [abrirCart, setAbrirCart] = useState(false);
+
   const { token } = useAuth();
   const [selecionado, setSelecionado] = useState(''); //guardará os dados do restaurante
   const [produto, setProduto] = useState('');
@@ -48,15 +51,15 @@ export default function Dashboard() {
 
   async function selecionarItem(item) {
     //se for restaurante(gambiarra)
-    if(item.taxa_entrega){
+    if (item.taxa_entrega) {
       setBusca('')
       let produtos = [];
       setSelecionado(item);
       try {
         const resposta = await get(`restaurantes/${item.id}`, token)
-  
+
         const lista = await resposta.json();
-  
+
         lista.forEach(produto => {
           produto.ativo && produtos.push(produto)
         })
@@ -66,22 +69,26 @@ export default function Dashboard() {
       }
       setItens(produtos)
     }
-    else if(item.preco){
+    else if (item.preco) {
       setProduto(item);
       setAbrirModal(true);
-      console.log(item)
     }
-
   }
 
 
   return (
     <div>
-      <Modal 
-      restaurante={selecionado}
-      produto={produto}
-      abrirModal={abrirModal}
-      setAbrirModal={setAbrirModal}
+      <Modal
+        restaurante={selecionado}
+        produto={produto}
+        abrirModal={abrirModal}
+        setAbrirModal={setAbrirModal}
+        setAbrirCart={setAbrirCart}
+      />
+      <Carrinho
+        restaurante={selecionado}
+        abrirCart={abrirCart}
+        setAbrirCart={setAbrirCart}
       />
       <Cabecalho
         restaurante={selecionado}
@@ -89,6 +96,7 @@ export default function Dashboard() {
       <div className="sub-cabecalho">
         {selecionado ? (
           <Subheader
+            setAbrirCart={setAbrirCart}
             selecionado={selecionado}
           />
         ) : (
@@ -101,7 +109,7 @@ export default function Dashboard() {
         )}
       </div>
       <div className="container-produtos">
-        {itens && itens.map((item) => 
+        {itens && itens.map((item) =>
           <Card
             key={item.nome}
             item={item}
