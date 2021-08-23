@@ -4,6 +4,8 @@ import { get, post } from '../../services/ApiClient';
 import useAuth from '../../hooks/useAuth';
 import './styles.css';
 import Card from '../../components/Card';
+import Modal from '../../components/Modal';
+import Subheader from '../../components/Subheader';
 import InputBusca from '../../components/InputBusca';
 import Cabecalho from '../../components/Cabecalho';
 import Snackbar from '../../components/Snackbar';
@@ -12,9 +14,10 @@ export default function Dashboard() {
   const [busca, setBusca] = useState('');
   const [mensagem, setMensagem] = useState('');
   const [openSnack, setOpenSnack] = useState(false);
-  const { token } = useAuth()
+  const [abrirModal, setAbrirModal] = useState(true);
+  const { token } = useAuth();
   const [selecionado, setSelecionado] = useState('');
-  const [restaurantes, setRestaurantes] = useState('');
+  const [itens, setItens] = useState('');
 
   async function buscarRestaurantes(busca) {
     try {
@@ -22,7 +25,7 @@ export default function Dashboard() {
 
       const lista = await resposta.json();
 
-      setRestaurantes(lista);
+      setItens(lista);
     } catch (error) {
       setMensagem({ texto: error.message, status: 'erro' });
       setOpenSnack(true);
@@ -30,49 +33,75 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    buscarRestaurantes();
-  }, [])
+    if (!itens) {
+      buscarRestaurantes();
+    }
+  }, [buscarRestaurantes, itens])
+
 
   useEffect(() => {
-    buscarRestaurantes(busca);
+    if (busca) {
+      buscarRestaurantes(busca);
+    }
   }, [busca, buscarRestaurantes])
-  
-
 
   async function selecionarItem(item) {
-    setSelecionado(item);
+    //se for restaurante(gambiarra)
+    if(item.taxa_entrega){
+      setBusca('')
+      let produtos = [];
+      setSelecionado(item);
+      try {
+        const resposta = await get(`restaurantes/${item.id}`, token)
+  
+        const lista = await resposta.json();
+  
+        lista.forEach(produto => {
+          produto.ativo && produtos.push(produto)
+        })
+      } catch (error) {
+        setMensagem({ texto: error.message, status: 'erro' });
+        setOpenSnack(true);
+      }
+      setItens(produtos)
+    }
+    //se for produto
+    else{
+      console.log(item)
+    }
+
   }
 
 
   return (
     <div>
-      <Cabecalho 
-      restaurante={selecionado}
+      <Modal />
+      <Cabecalho
+        restaurante={selecionado}
       />
       <div className="sub-cabecalho">
         {selecionado ? (
-          <span>
-            Selecionado
-          </span>
-        ) :(
-        <form>
-          <InputBusca
-            value={busca}
-            setValue={setBusca}
+          <Subheader
+            selecionado={selecionado}
           />
-        </form>
+        ) : (
+          <form>
+            <InputBusca
+              value={busca}
+              setValue={setBusca}
+            />
+          </form>
         )}
       </div>
       <div className="container-produtos">
-      {restaurantes && 
-            restaurantes.map((restaurante) => (
-              <Card 
-              key={restaurante.id} 
-              item={restaurante}
-              onClick={selecionarItem}
-              />
-            ))
-      }
+        {itens && itens.map((item) => 
+          <Card
+            key={item.nome}
+            item={item}
+            onClick={selecionarItem}
+          />
+        )
+        }
       </div>
       <Snackbar
         mensagem={mensagem}
