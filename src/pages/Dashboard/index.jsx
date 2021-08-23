@@ -14,9 +14,10 @@ export default function Dashboard() {
   const [busca, setBusca] = useState('');
   const [mensagem, setMensagem] = useState('');
   const [openSnack, setOpenSnack] = useState(false);
-  const [abrirModal, setAbrirModal] = useState(true);
+  const [abrirModal, setAbrirModal] = useState(false);
   const { token } = useAuth();
   const [selecionado, setSelecionado] = useState('');
+  const [produto, setProduto] = useState('');
   const [itens, setItens] = useState('');
 
   async function buscarRestaurantes(busca) {
@@ -65,8 +66,9 @@ export default function Dashboard() {
       }
       setItens(produtos)
     }
-    //se for produto
-    else{
+    else if(item.preco){
+      setProduto(item);
+      setAbrirModal(true);
       console.log(item)
     }
 
@@ -75,7 +77,12 @@ export default function Dashboard() {
 
   return (
     <div>
-      <Modal />
+      <Modal 
+      restaurante={selecionado}
+      produto={produto}
+      abrirModal={abrirModal}
+      setAbrirModal={setAbrirModal}
+      />
       <Cabecalho
         restaurante={selecionado}
       />
