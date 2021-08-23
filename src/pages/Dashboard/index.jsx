@@ -16,7 +16,7 @@ export default function Dashboard() {
   const [openSnack, setOpenSnack] = useState(false);
   const [abrirModal, setAbrirModal] = useState(false);
   const { token } = useAuth();
-  const [selecionado, setSelecionado] = useState('');
+  const [selecionado, setSelecionado] = useState(''); //guardará os dados do restaurante
   const [produto, setProduto] = useState('');
   const [itens, setItens] = useState('');
 
