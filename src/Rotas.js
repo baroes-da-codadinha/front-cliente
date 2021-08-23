@@ -6,6 +6,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
 import useAuth from './hooks/useAuth';
 import Login from './pages/Login';
 import Cadastro from './pages/Cadastro';
@@ -24,6 +25,7 @@ function RotasProtegidas(props) {
 function Rotas() {
   return (
     <AuthProvider>
+      <CartProvider>
       <Router>
         <Switch>
           <Route path="/" exact component={Login} />
@@ -33,6 +35,7 @@ function Rotas() {
           </RotasProtegidas>
         </Switch>
       </Router>
+      </CartProvider>
     </AuthProvider>
   );
 }
