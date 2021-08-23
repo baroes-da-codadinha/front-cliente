@@ -6,7 +6,7 @@ import IconFechar from '../../assets/x.svg';
 import IconCart from '../../assets/carrinho.svg';
 import Snackbar from '../Snackbar';
 
-export default function Carrinho({ restaurante, abrirCart, setAbrirCart }) {
+export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbrirEndereco }) {
 
   const array = [
     {
@@ -32,6 +32,11 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart }) {
       "url_imagem": "https://fhfmgjnasgrddtfwgquj.supabase.in/storage/v1/object/public/cubosfood/placeholders/produto.png"
     },]
 
+    function irParaEndereco(){
+      setAbrirEndereco(true);
+      setAbrirCart(false);
+    }
+
   return (
     <>
       {abrirCart && (
@@ -53,7 +58,8 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart }) {
                   <span className="text-endereco">(Aqui vai o endereço)</span>
                 </div>
               ) : (
-                <div className="alerta-endereco">
+                <div onClick={() => irParaEndereco()}
+                className="alerta-endereco">
                   Adicionar endereço
                 </div>
               )}

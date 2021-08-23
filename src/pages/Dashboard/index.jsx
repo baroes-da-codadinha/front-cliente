@@ -10,6 +10,7 @@ import Subheader from '../../components/Subheader';
 import InputBusca from '../../components/InputBusca';
 import Cabecalho from '../../components/Cabecalho';
 import Snackbar from '../../components/Snackbar';
+import ModalEndereco from '../../components/ModalEndereco';
 
 export default function Dashboard() {
   const [busca, setBusca] = useState('');
@@ -17,6 +18,8 @@ export default function Dashboard() {
   const [openSnack, setOpenSnack] = useState(false);
   const [abrirModal, setAbrirModal] = useState(false);
   const [abrirCart, setAbrirCart] = useState(false);
+  const [abrirEndereco, setAbrirEndereco] = useState(false);
+
 
   const { token } = useAuth();
   const [selecionado, setSelecionado] = useState(''); //guardará os dados do restaurante
@@ -85,10 +88,15 @@ export default function Dashboard() {
         setAbrirModal={setAbrirModal}
         setAbrirCart={setAbrirCart}
       />
+      <ModalEndereco
+        abrirEndereco={abrirEndereco}
+        setAbrirEndereco={setAbrirEndereco}
+      />
       <Carrinho
         restaurante={selecionado}
         abrirCart={abrirCart}
         setAbrirCart={setAbrirCart}
+        setAbrirEndereco={setAbrirEndereco}
       />
       <Cabecalho
         restaurante={selecionado}

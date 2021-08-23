@@ -1,0 +1,13 @@
+.centraliza{
+    align-self: center;
+}
+
+.coloca-um-gapizinho{
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+.topzera{
+    margin-top: 4rem;
+}
