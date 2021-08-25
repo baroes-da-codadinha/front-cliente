@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useForm } from "react-hook-form";
+import useAuth from '../../hooks/useAuth';
 import { post } from '../../services/ApiClient';
 import IconFechar from '../../assets/x.svg';
 import IconCart from '../../assets/carrinho.svg';
@@ -9,11 +9,12 @@ import './styles.css';
 import Snackbar from '../Snackbar';
 import InputTexto from '../InputTexto';
 
-export default function ModalEndereco({ abrirEndereco, setAbrirEndereco }) {
+export default function ModalEndereco({ abrirEndereco, setAbrirEndereco, setAbrirCart }) {
+    const { token } = useAuth();
+
     const [mensagem, setMensagem] = useState('');
     const [openSnack, setOpenSnack] = useState(false);
     const { register, handleSubmit, formState } = useForm();
-    const history = useHistory();
 
     useEffect(() => {
         const { cep, endereco, complemento } = formState.errors;
@@ -36,7 +37,7 @@ export default function ModalEndereco({ abrirEndereco, setAbrirEndereco }) {
 
     async function onSubmit(data) {
         try {
-            const resposta = await post('endereco', data);
+            const resposta = await post('endereco', data, token);
 
             if (!resposta.ok) {
                 const msg = await resposta.json();
@@ -46,7 +47,8 @@ export default function ModalEndereco({ abrirEndereco, setAbrirEndereco }) {
                 return;
             }
 
-            history.push('/pedido');
+            setAbrirEndereco(false);
+            setAbrirCart(true);
         } catch (error) {
             setMensagem({ texto: error.message, status: 'erro' });
             setOpenSnack(true);

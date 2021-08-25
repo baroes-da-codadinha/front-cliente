@@ -91,6 +91,7 @@ export default function Dashboard() {
       <ModalEndereco
         abrirEndereco={abrirEndereco}
         setAbrirEndereco={setAbrirEndereco}
+        setAbrirCart={setAbrirCart}
       />
       <Carrinho
         restaurante={selecionado}
