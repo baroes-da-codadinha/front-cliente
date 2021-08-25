@@ -32,6 +32,7 @@ function Rotas() {
           <Route path="/cadastro" exact component={Cadastro} />
           <RotasProtegidas>
             <Route path="/restaurantes" exact component={Dashboard} />
+            <Route path="/restaurantes/nomedorestaurante" exact component={Dashboard} />
           </RotasProtegidas>
         </Switch>
       </Router>
