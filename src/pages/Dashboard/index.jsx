@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { get, post } from '../../services/ApiClient';
@@ -51,6 +52,19 @@ export default function Dashboard() {
       buscarRestaurantes(busca);
     }
   }, [busca, buscarRestaurantes])
+
+
+  function retornar() {
+    setBusca('');
+    setMensagem('');
+    setOpenSnack(false);
+    setAbrirModal(false);
+    setAbrirCart(false);
+    setAbrirEndereco(false);
+    setSelecionado('')
+    setProduto('');
+    setItens('');
+  }
 
   async function selecionarItem(item) {
     //se for restaurante(gambiarra)
@@ -106,6 +120,7 @@ export default function Dashboard() {
           <Subheader
             setAbrirCart={setAbrirCart}
             selecionado={selecionado}
+            retornar={retornar}
           />
         ) : (
           <form>

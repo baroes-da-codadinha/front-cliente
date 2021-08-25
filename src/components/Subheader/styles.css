@@ -1,11 +1,16 @@
 .sh-base {
-    position: relative;
-    right: 20vw;
-    bottom: 0;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    right: 10vw;
+}
+
+.sh-base div {
+    margin-left: auto;
 }
 
 .sh-base button {
-    margin-left: 18vw;
+    margin-right: 2rem;
 }
 
 .sh-detalhes, .sh-detalhes div {
@@ -17,6 +22,14 @@
 
 .sh-detalhes{
     justify-content: space-between;
+}
+
+
+.sh-descricao{
+    position: relative;
+    padding-left: 1rem;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 
