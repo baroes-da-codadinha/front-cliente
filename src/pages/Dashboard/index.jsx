@@ -29,7 +29,7 @@ export default function Dashboard() {
 
   async function buscarRestaurantes(busca) {
     try {
-      const resposta = await post('restaurantes', { busca }, token);
+      const resposta = await get(`restaurantes/?busca=${busca}`, token)
 
       const lista = await resposta.json();
 
@@ -41,17 +41,8 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    if (!itens) {
-      buscarRestaurantes();
-    }
-  }, [buscarRestaurantes, itens])
-
-
-  useEffect(() => {
-    if (busca) {
-      buscarRestaurantes(busca);
-    }
-  }, [busca, buscarRestaurantes])
+    buscarRestaurantes(busca)
+  }, [busca])
 
 
   function retornar() {
@@ -61,9 +52,10 @@ export default function Dashboard() {
     setAbrirModal(false);
     setAbrirCart(false);
     setAbrirEndereco(false);
-    setSelecionado('')
+    setSelecionado(''); //guardará os dados do restaurante
     setProduto('');
     setItens('');
+    buscarRestaurantes(busca);
   }
 
   async function selecionarItem(item) {
@@ -105,7 +97,6 @@ export default function Dashboard() {
       <ModalEndereco
         abrirEndereco={abrirEndereco}
         setAbrirEndereco={setAbrirEndereco}
-        setAbrirCart={setAbrirCart}
       />
       <Carrinho
         restaurante={selecionado}
