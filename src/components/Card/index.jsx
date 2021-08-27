@@ -8,7 +8,7 @@ export default function Card({ item, onClick }) {
     nome, descricao, url_imagem: urlImagem, preco
   } = item;
   const [editando, setEditando] = useState(false);
-
+  
   const [mensagem, setMensagem] = useState('');
   const [openSnack, setOpenSnack] = useState(false);
 

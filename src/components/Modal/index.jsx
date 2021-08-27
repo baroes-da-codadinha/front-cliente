@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import './styles.css';
-import useCart from '../../hooks/useCart';
 import IconFechar from '../../assets/x.svg';
 import IconCart from '../../assets/carrinho.svg';
 import IconCifrao from '../../assets/cifrao-icon.svg'
@@ -9,20 +8,23 @@ import IconTempo from '../../assets/tempo-icon.svg'
 import editarPreco from '../../functions/editarPreco';
 import Snackbar from '../Snackbar';
 
-export default function Modal({ restaurante, produto, abrirModal, setAbrirModal, setAbrirCart }) {
-  const [quantidade, setQuantidade] = useState(1)
-  const [adicionado, setAdicionado] = useState(false)
-  const { adicionarAoCarrinho } = useCart();
+export default function Modal({ restaurante, produto, abrirModal, setAbrirModal, carrinho, setCarrinho, setAbrirCart }) {
+  const [quantidade, setQuantidade] = useState(1);
+  const [adicionado, setAdicionado] = useState(false);
+  const [mensagem, setMensagem] = useState('');
+  const [openSnack, setOpenSnack] = useState(false);
 
   function adicionarCarrinho() {
-    const item = {
-      restaurante_id: restaurante.id,
-      id: produto.id,
-      quantidade: quantidade,
-    }
-    adicionarAoCarrinho(item);
-    setQuantidade(1);
-    setAdicionado(true)
+      const item = {
+        produto_id: produto.id,
+        nome: produto.nome,
+        preco: produto.preco,
+        quantidade,
+        url_imagem: produto.url_imagem
+      }
+
+      setCarrinho([item, ...carrinho])
+      setAdicionado(true);
   }
 
   function fecharModal() {
@@ -108,6 +110,9 @@ export default function Modal({ restaurante, produto, abrirModal, setAbrirModal,
             </div>
           </div>
           <Snackbar
+            mensagem={mensagem}
+            openSnack={openSnack}
+            setOpenSnack={setOpenSnack}
           />
         </div>
       )}

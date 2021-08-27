@@ -6,36 +6,13 @@ import IconFechar from '../../assets/x.svg';
 import IconCart from '../../assets/carrinho.svg';
 import Snackbar from '../Snackbar';
 
-export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbrirEndereco }) {
+export default function Carrinho({ restaurante, abrirCart, setAbrirCart, carrinho, setAbrirEndereco }) {
+  const [mensagem, setMensagem] = useState('');
 
-  const array = [
-    {
-      "id": 2,
-      "quantidade": 1,
-      "restaurante_id": 3,
-      "nome": "Produto do Rodrigo",
-      "descricao": "",
-      "preco": 10000,
-      "ativo": true,
-      "permite_observacoes": false,
-      "url_imagem": "https://fhfmgjnasgrddtfwgquj.supabase.in/storage/v1/object/public/cubosfood/placeholders/produto.png"
-    },
-    {
-      "id": 3,
-      "quantidade": 2,
-      "restaurante_id": 3,
-      "nome": "Outro produto do Rodrigo",
-      "descricao": "",
-      "preco": 40000,
-      "ativo": true,
-      "permite_observacoes": false,
-      "url_imagem": "https://fhfmgjnasgrddtfwgquj.supabase.in/storage/v1/object/public/cubosfood/placeholders/produto.png"
-    },]
-
-    function irParaEndereco(){
-      setAbrirEndereco(true);
-      setAbrirCart(false);
-    }
+  function irParaEndereco() {
+    setAbrirEndereco(true);
+    setAbrirCart(false);
+  }
 
   return (
     <>
@@ -59,7 +36,7 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
                 </div>
               ) : (
                 <div onClick={() => irParaEndereco()}
-                className="alerta-endereco">
+                  className="alerta-endereco">
                   Adicionar endereço
                 </div>
               )}
@@ -68,7 +45,7 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
               Tempo de Entrega: {restaurante.tempo_entrega_minutos}min
             </div>
             <div className="cartbox">
-              {array.map((item) => (
+              {carrinho.map((item) => (
                 <div className="mini-card">
                   <img src={item.url_imagem} alt={item.nome} />
                   <div className="mini-detalhes">
@@ -104,9 +81,9 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
                   {restaurante && editarPreco(restaurante.taxa_entrega, true)}
                 </div>
               </div>
-                <button className="aceitar">
-                  Confirmar pedido
-                </button>
+              <button className="aceitar">
+                Confirmar pedido
+              </button>
             </div>
           </div>
           <Snackbar

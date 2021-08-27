@@ -21,9 +21,9 @@ export default function Dashboard() {
   const [abrirCart, setAbrirCart] = useState(false);
   const [abrirEndereco, setAbrirEndereco] = useState(false);
 
-
   const { token } = useAuth();
   const [selecionado, setSelecionado] = useState(''); //guardará os dados do restaurante
+  const [carrinho, setCarrinho] = useState([]);
   const [produto, setProduto] = useState('');
   const [itens, setItens] = useState('');
 
@@ -84,12 +84,13 @@ export default function Dashboard() {
     }
   }
 
-
   return (
     <div>
       <Modal
         restaurante={selecionado}
         produto={produto}
+        carrinho={carrinho}
+        setCarrinho={setCarrinho}
         abrirModal={abrirModal}
         setAbrirModal={setAbrirModal}
         setAbrirCart={setAbrirCart}
@@ -102,6 +103,7 @@ export default function Dashboard() {
         restaurante={selecionado}
         abrirCart={abrirCart}
         setAbrirCart={setAbrirCart}
+        carrinho={carrinho}
         setAbrirEndereco={setAbrirEndereco}
       />
       <Cabecalho
