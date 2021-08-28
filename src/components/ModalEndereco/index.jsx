@@ -30,9 +30,12 @@ export default function ModalEndereco({ abrirEndereco, setAbrirEndereco, setAbri
                 return;
             }
 
-            setEnderecoCadastrado(true);
-            setAbrirEndereco(true);
-            setAbrirCart(true);
+            if (resposta.ok) {
+                setAbrirEndereco(true);
+                setEnderecoCadastrado(true);
+                return
+            }
+
         } catch (error) {
             setMensagem({ texto: error.message, status: 'erro' });
             setOpenSnack(true);
@@ -45,10 +48,10 @@ export default function ModalEndereco({ abrirEndereco, setAbrirEndereco, setAbri
             {abrirEndereco && (
                 <div className="modal">
                     {enderecoCadastrado ? (
-                        <>
+                        <div>
                             <IconChecked />
                             <span className="text-endereco">Endereço adicionado com sucesso.</span>
-                        </>
+                        </div>
                     ) : (
                         <div>
                             <form onSubmit={handleSubmit(onSubmit)}>
