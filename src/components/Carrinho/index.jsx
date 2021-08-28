@@ -7,9 +7,11 @@ import editarPreco from '../../functions/editarPreco';
 import IconFechar from '../../assets/x.svg';
 import IconCart from '../../assets/carrinho.svg';
 import Snackbar from '../Snackbar';
+import useCart from '../../hooks/useCart';
 
 export default function Carrinho({ restaurante, abrirCart, setAbrirCart, carrinho, setAbrirEndereco }) {
   const { token } = useAuth();
+  const { cart } = useCart();
   const [enderecoAdicionado, setEnderecoAdicionado] = useState(false);
   const [pedidoConfirmado, setPedidoConfirmado] = useState(false);
   const [endereco, setEndereco] = useState(null);
@@ -105,7 +107,7 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, carrinh
               Tempo de Entrega: {restaurante.tempo_entrega_minutos}min
             </div>
             <div className="cartbox">
-              {carrinho.map((item) => (
+              {cart.map((item) => (
                 <div className="mini-card">
                   <img src={item.url_imagem} alt={item.nome} />
                   <div className="mini-detalhes">

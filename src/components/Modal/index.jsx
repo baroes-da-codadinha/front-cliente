@@ -7,8 +7,11 @@ import IconCifrao from '../../assets/cifrao-icon.svg'
 import IconTempo from '../../assets/tempo-icon.svg'
 import editarPreco from '../../functions/editarPreco';
 import Snackbar from '../Snackbar';
+import useCart from '../../hooks/useCart';
 
 export default function Modal({ restaurante, produto, abrirModal, setAbrirModal, carrinho, setCarrinho, setAbrirCart }) {
+  const { adicionarAoCarrinho } = useCart()
+  
   const [quantidade, setQuantidade] = useState(1);
   const [adicionado, setAdicionado] = useState(false);
   const [mensagem, setMensagem] = useState('');
@@ -23,13 +26,15 @@ export default function Modal({ restaurante, produto, abrirModal, setAbrirModal,
         url_imagem: produto.url_imagem
       }
 
-      setCarrinho([item, ...carrinho])
+      setCarrinho([item, ...carrinho]);
+      adicionarAoCarrinho(item);
       setAdicionado(true);
   }
 
   function fecharModal() {
     setAdicionado(false);
     setAbrirModal(false);
+    setQuantidade(1);
   }
 
   function irParaCarrinho() {
