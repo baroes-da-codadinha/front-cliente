@@ -26,16 +26,16 @@ function Rotas() {
   return (
     <AuthProvider>
       <CartProvider>
-      <Router>
-        <Switch>
-          <Route path="/" exact component={Login} />
-          <Route path="/cadastro" exact component={Cadastro} />
-          <RotasProtegidas>
+        <Router>
+          <Switch>
+            <Route path="/" exact component={Login} />
+            <Route path="/cadastro" exact component={Cadastro} />
+            
             <Route path="/restaurantes" exact component={Dashboard} />
-            <Route path="/restaurantes/nomedorestaurante" exact component={Dashboard} />
-          </RotasProtegidas>
-        </Switch>
-      </Router>
+            <RotasProtegidas>
+            </RotasProtegidas>
+          </Switch>
+        </Router>
       </CartProvider>
     </AuthProvider>
   );

@@ -12,8 +12,13 @@ import InputBusca from '../../components/InputBusca';
 import Cabecalho from '../../components/Cabecalho';
 import Snackbar from '../../components/Snackbar';
 import ModalEndereco from '../../components/ModalEndereco';
+import useCart from '../../hooks/useCart';
 
 export default function Dashboard() {
+  const { cart, limparCarrinho } = useCart()
+
+  const { token } = useAuth();
+
   const [busca, setBusca] = useState('');
   const [mensagem, setMensagem] = useState('');
   const [openSnack, setOpenSnack] = useState(false);
@@ -21,7 +26,6 @@ export default function Dashboard() {
   const [abrirCart, setAbrirCart] = useState(false);
   const [abrirEndereco, setAbrirEndereco] = useState(false);
 
-  const { token } = useAuth();
   const [selecionado, setSelecionado] = useState(''); //guardará os dados do restaurante
   const [carrinho, setCarrinho] = useState([]);
   const [produto, setProduto] = useState('');
@@ -63,7 +67,9 @@ export default function Dashboard() {
     if (item.taxa_entrega) {
       setBusca('')
       let produtos = [];
+      let idProdutos = [];
       setSelecionado(item);
+
       try {
         const resposta = await get(`restaurantes/${item.id}`, token)
 
@@ -71,12 +77,22 @@ export default function Dashboard() {
 
         lista.forEach(produto => {
           produto.ativo && produtos.push(produto)
+          produto.ativo && idProdutos.push(produto.id)
         })
+
+        //lógica de limpar o carrinho ao clicar em restaurante diferente
+        if(cart.length > 0){
+          if(!idProdutos.find(id => id === cart[0].produto_id)){
+            limparCarrinho()
+          }
+        }
+
       } catch (error) {
         setMensagem({ texto: error.message, status: 'erro' });
         setOpenSnack(true);
       }
       setItens(produtos)
+
     }
     else if (item.preco) {
       setProduto(item);

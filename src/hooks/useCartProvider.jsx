@@ -13,8 +13,9 @@ export default function useCartProvider() {
   };
 
   const limparCarrinho = () => {
-    setCart(null);
     removeCartPersistido();
+    setCart([]);
+    setCartPersistido([]);
   };
 
   return {
