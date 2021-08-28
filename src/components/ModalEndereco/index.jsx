@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
@@ -31,7 +32,6 @@ export default function ModalEndereco({ abrirEndereco, setAbrirEndereco, setAbri
             }
 
             if (resposta.ok) {
-                setAbrirEndereco(true);
                 setEnderecoCadastrado(true);
                 return
             }
@@ -43,14 +43,37 @@ export default function ModalEndereco({ abrirEndereco, setAbrirEndereco, setAbri
         }
     }
 
+    function voltar() {
+        setAbrirEndereco(false);
+        setAbrirCart(true);
+    }
+
     return (
         <>
             {abrirEndereco && (
                 <div className="modal">
                     {enderecoCadastrado ? (
                         <div>
-                            <IconChecked />
-                            <span className="text-endereco">Endereço adicionado com sucesso.</span>
+                            <div className="base n-produto padded" >
+                                <img
+                                    className="fechar"
+                                    src={IconFechar}
+                                    alt='fechar'
+                                    onClick={() => setAbrirEndereco(false)} />
+                                <div className="cart-titulo">
+                                    <img src={IconCart} alt='carrinho' />
+                                    Adicionar Endereço
+                                </div>
+                                <img className="check-icon" src={IconChecked} />
+                                <div className="sucesso-modal">
+                                    Endereço adicionado <br /> com sucesso.
+                                </div>
+                                <button
+                                    onClick={() => voltar()}
+                                    className="aceitar centraliza topzera">
+                                    Voltar ao cardápio
+                                </button>
+                            </div>
                         </div>
                     ) : (
                         <div>
