@@ -15,36 +15,17 @@ export default function Cadastro() {
   const { register, handleSubmit, formState, getValues } = useForm();
   const history = useHistory();
 
-  useEffect(() => {
-    const { nome, email, telefone, senha, senhaRepetida } = formState.errors;
-    if (nome) {
-      setMensagem({ texto: nome.message, status: 'erro' });
-      setOpenSnack(true);
-      return;
-    }
-    if (email) {
-      setMensagem({ texto: email.message, status: 'erro' });
-      setOpenSnack(true);
-      return;
-    }
-    if (telefone) {
-      setMensagem({ texto: telefone.message, status: 'erro' });
-      setOpenSnack(true);
-      return;
-    }
-    if (senha) {
-      setMensagem({ texto: senha.message, status: 'erro' });
-      setOpenSnack(true);
-      return;
-    }
-    if (senhaRepetida) {
-      setMensagem({ texto: senhaRepetida.message, status: 'erro' });
-      setOpenSnack(true);
-      return;
-    }
-  }, [formState])
-
   async function onSubmit(data) {
+    if (data.senha !== data.senhaRepetida) {
+      const msg = 'Senhas não são iguais';
+
+      setMensagem({ texto: msg, status: 'erro' });
+      setOpenSnack(true);
+      return;
+    }
+
+    delete data.senhaRepetida;
+
     try {
       const resposta = await post('consumidor', data);
 
@@ -76,31 +57,29 @@ export default function Cadastro() {
           <div className="form-um">
             <InputTexto
               label="Nome do usuário"
-              {...register('nome', 
-              { required: 'Nome é um campo obrigatório' })}
+              {...register('nome')}
             />
             <InputTexto
               label="Email"
-              {...register('email', 
-              { required: 'Email é um campo obrigatório', 
-              minLength: { value: 3, message: 'Email inválido'},})}
+              {...register('email',
+                {
+                  minLength: { value: 3, message: 'Email inválido' },
+                })}
             />
             <InputTexto
               label="Telefone"
-              {...register('telefone', 
-              { required: 'Telefone é um campo obrigatório', 
-              minLength: { value: 8, message: 'A senha deverá ter ao menos 8 caracteres'},})}
+              {...register('telefone',
+                {
+                  minLength: { value: 8, message: 'A senha deverá ter ao menos 8 caracteres' },
+                })}
             />
             <InputSenha
               label="Senha"
-              {...register('senha', 
-              { required: 'Senha é um campo obrigatório', 
-              minLength: { value: 5, message: 'A senha deverá ter ao menos 5 caracteres'},})}
+              {...register('senha')}
             />
             <InputSenha
               label="Repita a senha"
-              {...register('senhaRepetida', 
-              { validate: v => v === getValues("senha") || "As senhas devem ser iguais" })}
+              {...register('senhaRepetida')}
             />
           </div>
           <div className="button-box">
@@ -118,11 +97,11 @@ export default function Cadastro() {
         </form>
       </div>
       <div className="ilustracao" />
-      <Snackbar
+      {mensagem && <Snackbar
         mensagem={mensagem}
         openSnack={openSnack}
         setOpenSnack={setOpenSnack}
-      />
+      />}
     </div>
   );
 }

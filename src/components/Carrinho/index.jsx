@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import useAuth from '../../hooks/useAuth';
+import { get, post } from '../../services/ApiClient';
 import './styles.css';
 import editarPreco from '../../functions/editarPreco';
 import IconFechar from '../../assets/x.svg';
@@ -7,11 +9,69 @@ import IconCart from '../../assets/carrinho.svg';
 import Snackbar from '../Snackbar';
 
 export default function Carrinho({ restaurante, abrirCart, setAbrirCart, carrinho, setAbrirEndereco }) {
+  const { token } = useAuth();
+  const [enderecoAdicionado, setEnderecoAdicionado] = useState(false);
+  const [pedidoConfirmado, setPedidoConfirmado] = useState(false);
+  const [endereco, setEndereco] = useState(null);
   const [mensagem, setMensagem] = useState('');
+  const [openSnack, setOpenSnack] = useState(false);
 
   function irParaEndereco() {
     setAbrirEndereco(true);
     setAbrirCart(false);
+  }
+
+  async function encontrarEndereco() {
+    try {
+      const resposta = await get('endereco', token);
+
+      if (!resposta.ok) {
+        const msg = await resposta.json();
+
+        setMensagem({ texto: msg, status: 'erro' });
+        setOpenSnack(true);
+        setEnderecoAdicionado(false);
+        return;
+      }
+
+      const lista = await resposta.json();
+      setEndereco(lista);
+      setEnderecoAdicionado(true);
+      setOpenSnack(false);
+    } catch (error) {
+      setMensagem({ texto: error.message, status: 'erro' });
+      setOpenSnack(true);
+      setEnderecoAdicionado(false);
+    }
+  }
+
+  useEffect(() => {
+    encontrarEndereco()
+  }, [abrirCart])
+
+  async function confirmarPedido() {
+    const pedido = {
+      restaurante_id: restaurante.id,
+      carrinho
+    }
+
+    try {
+      const resposta = await post('pedido', pedido, token);
+
+      if (!resposta.ok) {
+        const msg = await resposta.json();
+
+        setMensagem({ texto: msg, status: 'erro' });
+        setOpenSnack(true);
+        setPedidoConfirmado(false);
+        return;
+      }
+
+      setPedidoConfirmado(true);
+    } catch (error) {
+      setMensagem({ texto: error.message, status: 'erro' });
+      setOpenSnack(true);
+    }
   }
 
   return (
@@ -29,10 +89,10 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, carrinh
               {restaurante.nome}
             </div>
             <div className="area-endereco">
-              {false ? (
+              {enderecoAdicionado ? (
                 <div>
                   <span className="txt-end-entrega">Endereco de entrega:</span>
-                  <span className="text-endereco">(Aqui vai o endereço)</span>
+                  <span className="text-endereco">{endereco.endereco}, {endereco.complemento}, {endereco.cep}</span>
                 </div>
               ) : (
                 <div onClick={() => irParaEndereco()}
@@ -87,6 +147,9 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, carrinh
             </div>
           </div>
           <Snackbar
+            mensagem={mensagem}
+            openSnack={openSnack}
+            setOpenSnack={setOpenSnack}
           />
         </div>
       )}
