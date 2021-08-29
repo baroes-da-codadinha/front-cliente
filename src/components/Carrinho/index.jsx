@@ -32,9 +32,6 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
 
       if (!resposta.ok) {
         const msg = await resposta.json();
-
-        setMensagem({ texto: msg, status: 'erro' });
-        setOpenSnack(true);
         setEnderecoAdicionado(false);
         return;
       }
@@ -65,7 +62,7 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
     if (cart.length > 0) {
       setConteudo('');
     }
-  }, [abrirCart, cart])
+  }, [abrirCart, cart, encontrarEndereco, subtotal])
 
   async function confirmarPedido() {
     const pedido = {
@@ -95,6 +92,11 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
   function voltar() {
     setAbrirEndereco(false);
     setAbrirCart(false);
+    setConteudo('vazio');
+  }
+
+  function limpar(){
+    limparCarrinho();
     setConteudo('vazio');
   }
 
@@ -177,6 +179,12 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
                 disabled={subtotal < restaurante.valor_minimo_pedido}
               >
                 {subtotal < restaurante.valor_minimo_pedido ? 'Pedido abaixo do valor mínimo!' : 'Confirmar pedido'}
+              </button>
+              <button
+                onClick={() =>limpar()}
+                className="cancelar"
+              >
+                 Limpar carrinho
               </button>
             </div>
           </div>
