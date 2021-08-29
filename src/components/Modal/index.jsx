@@ -9,7 +9,7 @@ import editarPreco from '../../functions/editarPreco';
 import Snackbar from '../Snackbar';
 import useCart from '../../hooks/useCart';
 
-export default function Modal({ restaurante, produto, abrirModal, setAbrirModal, carrinho, setCarrinho, setAbrirCart }) {
+export default function Modal({ restaurante, produto, abrirModal, setAbrirModal, setAbrirCart }) {
   const { adicionarAoCarrinho } = useCart()
   
   const [quantidade, setQuantidade] = useState(1);
@@ -25,8 +25,6 @@ export default function Modal({ restaurante, produto, abrirModal, setAbrirModal,
         quantidade,
         url_imagem: produto.url_imagem
       }
-
-      setCarrinho([item, ...carrinho]);
       adicionarAoCarrinho(item);
       setAdicionado(true);
   }
