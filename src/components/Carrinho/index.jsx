@@ -18,6 +18,8 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
   const [endereco, setEndereco] = useState(null);
   const [mensagem, setMensagem] = useState('');
   const [openSnack, setOpenSnack] = useState(false);
+  const [subtotal, setSubtotal] = useState(0);
+
 
   function irParaEndereco() {
     setAbrirEndereco(true);
@@ -48,9 +50,20 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
     }
   }
 
+  function calcularSubtotal() {
+    let novoSubtotal = 0;
+
+    for(const item of cart){
+       novoSubtotal = (item.preco * item.quantidade) + novoSubtotal;
+    }
+    setSubtotal(novoSubtotal);
+  }
+
   useEffect(() => {
-    encontrarEndereco()
-  }, [abrirCart])
+    encontrarEndereco();
+    calcularSubtotal();
+
+  }, [abrirCart, cart])
 
   async function confirmarPedido() {
     const pedido = {
@@ -84,108 +97,84 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
 
   return (
     <>
-      {abrirCart && (
-        <div className="modal">
-          {cart.length > 0 && pedidoConfirmado ? (
-            <div>
-              <div className="base n-produto padded">
-                <IconFechar className='fechar' alt='fechar' onClick={() => setAbrirEndereco(false)} />
-
-                <div className="cart-titulo">
-                  <IconCart alt='carrinho' />
-                  {restaurante.nome}
-                </div>
-
-                <IconChecked className="check-icon" />
-                <div className="sucesso-modal">
-                  Pedido confirmado.<br />
-                  Agora é só aguardar o seu pedido.
-                </div>
-                <button
-                  onClick={() => voltar()}
-                  className="aceitar centraliza topzera">
-                  Voltar para cardápio
-                </button>
+    {abrirCart && (
+      <div className="modal">
+        <div className="base n-produto padded">
+          <img
+            className="fechar"
+            src={IconFechar}
+            alt='fechar'
+            onClick={() => setAbrirCart(false)} />
+          <div className="cart-titulo">
+            <img src={IconCart} alt='carrinho' />
+            {restaurante.nome}
+          </div>
+          <div className="area-endereco">
+            {enderecoAdicionado ? (
+              <div>
+                <span className="txt-end-entrega">Endereco de entrega:</span>
+                <span className="text-endereco">{endereco.endereco}, {endereco.complemento}, {endereco.cep}</span>
               </div>
-            </div>
-          ) : (
-            <div>
-              <div className="base n-produto padded">
-                <IconFechar
-                  className="fechar"
-                  alt='fechar'
-                  onClick={() => setAbrirCart(false)} />
-                <div className="cart-titulo">
-                  <IconCart alt='carrinho' />
-                  {restaurante.nome}
-                </div>
-                <div className="area-endereco">
-                  {enderecoAdicionado ? (
-                    <div>
-                      <span className="txt-end-entrega">Endereco de entrega:</span>
-                      <span className="text-endereco">{endereco.endereco}, {endereco.complemento}, {endereco.cep}</span>
-                    </div>
-                  ) : (
-                    <div onClick={() => irParaEndereco()}
-                      className="alerta-endereco">
-                      Adicionar endereço
-                    </div>
-                  )}
-                </div>
-                <div className="txt-tempo">
-                  Tempo de Entrega: {restaurante.tempo_entrega_minutos}min
-                </div>
-                <div className="cartbox">
-                  {cart.map((item) => (
-                    <div className="mini-card">
-                      <img src={item.url_imagem} alt={item.nome} />
-                      <div className="mini-detalhes">
-                        <div className="mini-nome">{item.nome}</div>
-                        <div className="mini-quantidade">{item.quantidade} unidade{item.quantidade > 1 && "s"}</div>
-                        <div className="mini-preco">{item && editarPreco(item.preco, true)}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="fim-pedido">
-                  <div className="fim-subtotal">
-                    <div className="txt-fim">
-                      Subtotal
-                    </div>
-                    <div className="txt-resto">
-                      {restaurante && editarPreco(restaurante.taxa_entrega, true)}
-                    </div>
-                  </div>
-                  <div className="fim-taxa">
-                    <div className="txt-fim">
-                      Taxa de entrega
-                    </div>
-                    <div className="txt-resto">
-                      {restaurante && editarPreco(restaurante.taxa_entrega, true)}
-                    </div>
-                  </div>
-                  <div className="fim-total">
-                    <div className="txt-fim">
-                      Total
-                    </div>
-                    <div className="txt-total">
-                      {restaurante && editarPreco(restaurante.taxa_entrega, true)}
-                    </div>
-                  </div>
-                  <button className="aceitar" onClick={() => confirmarPedido()}>
-                    Confirmar pedido
-                  </button>
+            ) : (
+              <div onClick={() => irParaEndereco()}
+                className="alerta-endereco">
+                Adicionar endereço
+              </div>
+            )}
+          </div>
+          <div className="txt-tempo">
+            Tempo de Entrega: {restaurante.tempo_entrega_minutos}min
+          </div>
+          <div className="cartbox">
+            {cart.map((item) => (
+              <div className="mini-card">
+                <img src={item.url_imagem} alt={item.nome} />
+                <div className="mini-detalhes">
+                  <div className="mini-nome">{item.nome}</div>
+                  <div className="mini-quantidade">{item.quantidade} unidade{item.quantidade > 1 && "s"}</div>
+                  <div className="mini-preco">{item && editarPreco((item.preco*item.quantidade), true)}</div>
                 </div>
               </div>
+            ))}
+          </div>
+          <div className="fim-pedido">
+            <div className="fim-subtotal">
+              <div className="txt-fim">
+                Subtotal
+              </div>
+              <div className="txt-resto">
+                {restaurante && editarPreco(subtotal, true)}
+              </div>
             </div>
-          )}
-          <Snackbar
-            mensagem={mensagem}
-            openSnack={openSnack}
-            setOpenSnack={setOpenSnack}
-          />
+            <div className="fim-taxa">
+              <div className="txt-fim">
+                Taxa de entrega
+              </div>
+              <div className="txt-resto">
+                {restaurante && editarPreco(restaurante.taxa_entrega, true)}
+              </div>
+            </div>
+            <div className="fim-total">
+              <div className="txt-fim">
+                Total
+              </div>
+              <div className="txt-total">
+                {restaurante && editarPreco((restaurante.taxa_entrega + subtotal), true)}
+              </div>
+            </div>
+            <button 
+            onClick={() => confirmarPedido()}
+            className="aceitar"
+            disabled={subtotal < restaurante.valor_minimo_pedido}
+            >
+              {subtotal < restaurante.valor_minimo_pedido ? 'Pedido abaixo do valor mínimo!' : 'Confirmar pedido'}
+            </button>
+          </div>
         </div>
-      )}
-    </>
+        <Snackbar
+        />
+      </div>
+    )}
+  </>
   );
 }
