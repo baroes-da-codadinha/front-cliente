@@ -9,6 +9,7 @@ import Card from '../../components/Card';
 import Modal from '../../components/Modal';
 import Subheader from '../../components/Subheader';
 import InputBusca from '../../components/InputBusca';
+import IconVazio from '../../assets/vazio.svg';
 import Cabecalho from '../../components/Cabecalho';
 import Snackbar from '../../components/Snackbar';
 import ModalEndereco from '../../components/ModalEndereco';
@@ -65,7 +66,7 @@ export default function Dashboard() {
     if (item.taxa_entrega) {
       setBusca('')
       let produtos = [];
-      let idProdutos =[];
+      let idProdutos = [];
       setSelecionado(item);
       try {
         const resposta = await get(`restaurantes/${item.id}`, token)
@@ -77,8 +78,8 @@ export default function Dashboard() {
           produto.ativo && idProdutos.push(produto.id)
         })
 
-        if(cart.length > 0){
-          if(!idProdutos.find((id)=> id === cart[0].produto_id)){
+        if (cart.length > 0) {
+          if (!idProdutos.find((id) => id === cart[0].produto_id)) {
             limparCarrinho();
           }
         }
@@ -134,16 +135,22 @@ export default function Dashboard() {
           </form>
         )}
       </div>
-      <div className="container-produtos">
-        {itens && itens.map((item) =>
-          <Card
-            key={item.nome}
-            item={item}
-            onClick={selecionarItem}
-          />
-        )
-        }
-      </div>
+      {itens ?
+        (<div className="container-produtos">
+          {itens.map((item) =>
+            <Card
+              key={item.nome}
+              item={item}
+              onClick={selecionarItem}
+            />
+          )}
+        </div>)
+        :
+        (<div className="container-vazio">
+          <img src={IconVazio} alt='carrinho vazio'></img>
+          teste
+        </div>)
+      }
       <Snackbar
         mensagem={mensagem}
         openSnack={openSnack}

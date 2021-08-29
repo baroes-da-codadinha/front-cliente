@@ -1,5 +1,5 @@
+import React from 'react';
 import './styles.css';
-
 import IconChecked from '../../assets/checked.svg';
 import IconVazio from '../../assets/vazio.svg';
 

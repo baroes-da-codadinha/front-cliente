@@ -1,6 +1,6 @@
 import React from 'react';
 import useAuth from '../../hooks/useAuth';
-import './styles.css'; 
+import './styles.css';
 import Avatar from '../../assets/avatar.png';
 import Illustration from '../../assets/illustration-3.svg';
 import HeadImagem from '../../assets/bg-pizzaria.png';
@@ -21,8 +21,11 @@ export default function Cabecalho({ restaurante }) {
         style={{ backgroundImage: `url(${categoria ? categoria.url_imagem : HeadImagem})` }}
         className="imagem-cabecalho"
       />
+
       <img className="dash-ilustracao" src={Illustration} alt="" />
-      <img className="dash-barril-logo" src={BarriLogo} alt="" />
+      <div className="dash-barril-logo" >
+        <img src={BarriLogo} alt="" />
+      </div>
       <div className="avatar-borda">
         <img
           className="avatar"

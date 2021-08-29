@@ -26,43 +26,44 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
     setAbrirCart(false);
   }
 
-  async function encontrarEndereco() {
-    try {
-      const resposta = await get('endereco', token);
-
-      if (!resposta.ok) {
-        const msg = await resposta.json();
-        setEnderecoAdicionado(false);
-        return;
-      }
-
-      const lista = await resposta.json();
-      setEndereco(lista);
-      setEnderecoAdicionado(true);
-      setOpenSnack(false);
-    } catch (error) {
-      setMensagem({ texto: error.message, status: 'erro' });
-      setOpenSnack(true);
-      setEnderecoAdicionado(false);
-    }
-  }
-
-  function calcularSubtotal() {
-    let novoSubtotal = 0;
-
-    for (const item of cart) {
-      novoSubtotal = (item.preco * item.quantidade) + novoSubtotal;
-    }
-    setSubtotal(novoSubtotal);
-  }
+ 
 
   useEffect(() => {
+    function calcularSubtotal() {
+      let novoSubtotal = 0;
+  
+      for (const item of cart) {
+        novoSubtotal = (item.preco * item.quantidade) + novoSubtotal;
+      }
+      setSubtotal(novoSubtotal);
+    }
+
+    async function encontrarEndereco() {
+      try {
+        const resposta = await get('endereco', token);
+  
+        if (!resposta.ok) {
+          const msg = await resposta.json();
+          setEnderecoAdicionado(false);
+          return;
+        }
+  
+        const lista = await resposta.json();
+        setEndereco(lista);
+        setEnderecoAdicionado(true);
+        setOpenSnack(false);
+      } catch (error) {
+        setMensagem({ texto: error.message, status: 'erro' });
+        setOpenSnack(true);
+        setEnderecoAdicionado(false);
+      }
+    }
     encontrarEndereco();
     calcularSubtotal();
     if (cart.length > 0) {
       setConteudo('');
     }
-  }, [abrirCart, cart, encontrarEndereco, subtotal])
+  }, [token, abrirCart, cart, subtotal])
 
   async function confirmarPedido() {
     const pedido = {
