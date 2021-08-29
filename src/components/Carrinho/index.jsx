@@ -83,6 +83,11 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
         return;
       }
 
+      
+      setMensagem({ texto: 'Pedido cadastrado!', status: 'sucesso' });
+      setOpenSnack(true);
+
+
       setPedidoConfirmado(true);
     } catch (error) {
       setMensagem({ texto: error.message, status: 'erro' });
