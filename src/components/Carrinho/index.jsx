@@ -4,17 +4,17 @@ import useAuth from '../../hooks/useAuth';
 import useCart from '../../hooks/useCart';
 import { get, post } from '../../services/ApiClient';
 import './styles.css';
+import CarrinhoCover from '../CarrinhoCover';
 import editarPreco from '../../functions/editarPreco';
 import IconFechar from '../../assets/x.svg';
-import IconChecked from '../../assets/checked.svg';
 import IconCart from '../../assets/carrinho.svg';
 import Snackbar from '../Snackbar';
 
 export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbrirEndereco }) {
   const { token } = useAuth();
-  const { cart } = useCart()
+  const { cart, limparCarrinho } = useCart();
+  const [conteudo, setConteudo] = useState('vazio');
   const [enderecoAdicionado, setEnderecoAdicionado] = useState(false);
-  const [pedidoConfirmado, setPedidoConfirmado] = useState(false);
   const [endereco, setEndereco] = useState(null);
   const [mensagem, setMensagem] = useState('');
   const [openSnack, setOpenSnack] = useState(false);
@@ -62,7 +62,9 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
   useEffect(() => {
     encontrarEndereco();
     calcularSubtotal();
-
+    if (cart.length > 0) {
+      setConteudo('');
+    }
   }, [abrirCart, cart])
 
   async function confirmarPedido() {
@@ -79,16 +81,11 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
 
         setMensagem({ texto: msg, status: 'erro' });
         setOpenSnack(true);
-        setPedidoConfirmado(false);
         return;
       }
 
-      
-      setMensagem({ texto: 'Pedido cadastrado!', status: 'sucesso' });
-      setOpenSnack(true);
-
-
-      setPedidoConfirmado(true);
+      limparCarrinho();
+      setConteudo('confirmado');
     } catch (error) {
       setMensagem({ texto: error.message, status: 'erro' });
       setOpenSnack(true);
@@ -98,6 +95,7 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
   function voltar() {
     setAbrirEndereco(false);
     setAbrirCart(false);
+    setConteudo('vazio');
   }
 
   return (
@@ -109,7 +107,7 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
               className="fechar"
               src={IconFechar}
               alt='fechar'
-              onClick={() => setAbrirCart(false)} />
+              onClick={() => voltar()} />
             <div className="cart-titulo">
               <img src={IconCart} alt='carrinho' />
               {restaurante.nome}
@@ -127,6 +125,12 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
                 </div>
               )}
             </div>
+            {conteudo && (
+              <CarrinhoCover
+                conteudo={conteudo}
+                voltar={voltar}
+              />
+            )}
             <div className="txt-tempo">
               Tempo de Entrega: {restaurante.tempo_entrega_minutos}min
             </div>
