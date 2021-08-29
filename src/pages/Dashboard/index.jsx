@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
-import { get, post } from '../../services/ApiClient';
+import { get } from '../../services/ApiClient';
 import useAuth from '../../hooks/useAuth';
 import './styles.css';
 import Carrinho from '../../components/Carrinho';
@@ -26,7 +26,6 @@ export default function Dashboard() {
   const [abrirEndereco, setAbrirEndereco] = useState(false);
 
   const [selecionado, setSelecionado] = useState(''); //guardará os dados do restaurante
-  const [carrinho, setCarrinho] = useState([]);
   const [produto, setProduto] = useState('');
   const [itens, setItens] = useState('');
 

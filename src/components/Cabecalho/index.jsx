@@ -1,22 +1,16 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
 import useAuth from '../../hooks/useAuth';
-import './styles.css';
+import './styles.css'; 
 import Avatar from '../../assets/avatar.png';
 import Illustration from '../../assets/illustration-3.svg';
 import HeadImagem from '../../assets/bg-pizzaria.png';
 import BarriLogo from '../../assets/barril-logo.png';
-import Snackbar from '../Snackbar';
 
 export default function Cabecalho({ restaurante }) {
   const {
     nome, url_imagem: urlImagem, categoria,
   } = restaurante;
-  const history = useHistory();
-  const { token, deslogar } = useAuth();
-
-  const [erro, setMensagem] = useState('');
-  const [openSnack, setOpenSnack] = useState(false);
+  const { deslogar } = useAuth();
 
   function logout() {
     deslogar();
@@ -49,11 +43,6 @@ export default function Cabecalho({ restaurante }) {
         </button>
       </div>
       )
-      <Snackbar
-        erro={erro}
-        openSnack={openSnack}
-        setOpenSnack={setOpenSnack}
-      />
     </div>
   );
 }
