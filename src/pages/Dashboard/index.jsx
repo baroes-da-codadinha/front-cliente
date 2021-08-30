@@ -118,6 +118,7 @@ export default function Dashboard() {
         abrirCart={abrirCart}
         setAbrirCart={setAbrirCart}
         setAbrirEndereco={setAbrirEndereco}
+        setAbrirModal={setAbrirModal}
       />
       <Cabecalho
         restaurante={selecionado}
