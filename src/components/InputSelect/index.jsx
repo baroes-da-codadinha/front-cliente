@@ -16,10 +16,9 @@ export default function InputSelect({
       const arrayCategorias = await resposta.json();
       arrayCategorias.push({
         id: '',
-        nome: "Todas"
-      })
-      setCategorias(arrayCategorias);
-      console.log(arrayCategorias)
+        nome: "Todas as categorias"
+      });
+      setCategorias(arrayCategorias.reverse());
       return;
     } catch (error) {
       console.log(error);
