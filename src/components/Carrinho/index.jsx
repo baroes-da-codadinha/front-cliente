@@ -10,7 +10,7 @@ import IconFechar from '../../assets/x.svg';
 import IconCart from '../../assets/carrinho.svg';
 import Snackbar from '../Snackbar';
 
-export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbrirEndereco }) {
+export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbrirEndereco, setAbrirModal }) {
   const { token } = useAuth();
   const { cart, limparCarrinho } = useCart();
   const [conteudo, setConteudo] = useState('vazio');
@@ -26,13 +26,12 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
     setAbrirCart(false);
   }
 
-
+ 
 
   useEffect(() => {
-    setConteudo('vazio');
     function calcularSubtotal() {
       let novoSubtotal = 0;
-
+  
       for (const item of cart) {
         novoSubtotal = (item.preco * item.quantidade) + novoSubtotal;
       }
@@ -42,14 +41,16 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
     async function encontrarEndereco() {
       try {
         const resposta = await get('endereco', token);
-
+  
         if (!resposta.ok) {
-          const msg = await resposta.json(); 
+          const msg = await resposta.json();
+
           setMensagem({ texto: msg, status: 'erro' });
+          setOpenSnack(true);
           setEnderecoAdicionado(false);
           return;
         }
-
+  
         const lista = await resposta.json();
         setEndereco(lista);
         setEnderecoAdicionado(true);
@@ -102,6 +103,10 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
     limparCarrinho();
     setConteudo('vazio');
   }
+  
+  function abrirProduto() {
+    setAbrirModal(true);
+  }
 
   return (
     <>
@@ -141,7 +146,7 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
             </div>
             <div className="cartbox">
               {cart.map((item) => (
-                <div className="mini-card">
+                <div className="mini-card" onClick={() => abrirProduto()}>
                   <img src={item.url_imagem} alt={item.nome} />
                   <div className="mini-detalhes">
                     <div className="mini-nome">{item.nome}</div>
@@ -184,10 +189,10 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
                 {subtotal < restaurante.valor_minimo_pedido ? 'Pedido abaixo do valor mínimo!' : 'Confirmar pedido'}
               </button>
               <button
-                onClick={() => limpar()}
+                onClick={() =>limpar()}
                 className="cancelar"
               >
-                Limpar carrinho
+                 Limpar carrinho
               </button>
             </div>
           </div>
