@@ -89,6 +89,9 @@ export default function Dashboard() {
         setOpenSnack(true);
       }
       setItens(produtos)
+      if (itens.length === 0) {
+        setItens('')
+      }
     }
     else if (item.preco) {
       setProduto(item);
@@ -135,22 +138,21 @@ export default function Dashboard() {
           </form>
         )}
       </div>
-      {itens ?
-        (<div className="container-produtos">
-          {itens.map((item) =>
-            <Card
-              key={item.nome}
-              item={item}
-              onClick={selecionarItem}
-            />
-          )}
-        </div>)
-        :
-        (<div className="container-vazio">
+      <div className={`container-produtos ${itens ?? 'ocultar'}`}>
+        {itens && itens.map((item) =>
+          <Card
+            key={item.nome}
+            item={item}
+            onClick={selecionarItem}
+          />
+        )}
+      </div>
+      {itens.length < 1 && (
+        <div className="container-vazio">
           <img src={IconVazio} alt='carrinho vazio'></img>
-          teste
-        </div>)
-      }
+          <span>Desculpe, estamos sem produtos ativos</span>
+        </div>
+      )}
       <Snackbar
         mensagem={mensagem}
         openSnack={openSnack}

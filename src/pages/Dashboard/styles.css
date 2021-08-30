@@ -35,13 +35,29 @@
     width: 100%;
 }
 
-.container-vazio{
-    padding: 30vh;
-    background-color: black;
+.ocultar {
+    padding: 0;
+    height: 0%;
+}
+
+.container-vazio {
+    background-color: white;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
     height: 100%;
     width: 100%;
+}
+
+.container-vazio span {
+    color: #525459;
+    font-size: 2.0rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 10rem;
+}
+
+.container-vazio img {
+    margin: 0rem auto 4rem auto;
+    width: 21rem;
 }
