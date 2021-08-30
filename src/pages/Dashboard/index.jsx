@@ -20,8 +20,8 @@ export default function Dashboard() {
   const { token } = useAuth();
   const { limparCarrinho, cart } = useCart();
 
+  const [filtro, setFiltro] = useState({id:'', nome:'Todas as categorias'});
   const [busca, setBusca] = useState('');
-  const [filtro, setFiltro] = useState('');
   const [mensagem, setMensagem] = useState('');
   const [openSnack, setOpenSnack] = useState(false);
   const [abrirModal, setAbrirModal] = useState(false);
@@ -52,7 +52,7 @@ export default function Dashboard() {
 
 
   function retornar() {
-    setFiltro('');
+    setFiltro({id:'', nome:'Todas as categorias'});
     setBusca('');
     setMensagem('');
     setOpenSnack(false);
@@ -62,7 +62,6 @@ export default function Dashboard() {
     setSelecionado('')
     setProduto('');
     setItens('');
-    buscarRestaurantes(busca);
     setMensagem('');
     setOpenSnack(false);
   }
@@ -125,50 +124,52 @@ export default function Dashboard() {
         setAbrirEndereco={setAbrirEndereco}
         setAbrirModal={setAbrirModal}
       />
-      <Cabecalho
-        restaurante={selecionado}
-      />
-      <div className="sub-cabecalho">
-        {selecionado ? (
-          <Subheader
-            setAbrirCart={setAbrirCart}
-            selecionado={selecionado}
-            retornar={retornar}
-          />
-        ) : (
-          <form>
-            <InputBusca
-              value={busca}
-              setValue={setBusca}
+      <div className={(abrirCart || abrirEndereco || abrirModal) && 'blurry'}>
+        <Cabecalho
+          restaurante={selecionado}
+        />
+        <div className="sub-cabecalho">
+          {selecionado ? (
+            <Subheader
+              setAbrirCart={setAbrirCart}
+              selecionado={selecionado}
+              retornar={retornar}
             />
-            <InputSelect
-              placeholder="Selecione a categoria"
-              value={filtro}
-              setValue={setFiltro}
-            />
-          </form>
-        )}
-      </div>
-      <div className={`container-produtos ${itens ?? 'ocultar'}`}>
-        {itens && itens.map((item) =>
-          <Card
-            key={item.nome}
-            item={item}
-            onClick={selecionarItem}
-          />
-        )}
-      </div>
-      {itens.length < 1 && (
-        <div className="container-vazio">
-          <img src={IconVazio} alt='carrinho vazio'></img>
-          <span>Desculpe, {selecionado ? 'estamos sem produtos ativos' : 'não há restaurantes ativos na sua região'}</span>
+          ) : (
+            <form>
+              <InputBusca
+                value={busca}
+                setValue={setBusca}
+              />
+              <InputSelect
+                placeholder="Selecione a categoria"
+                value={filtro}
+                setValue={setFiltro}
+              />
+            </form>
+          )}
         </div>
-      )}
-      <Snackbar
-        mensagem={mensagem}
-        openSnack={openSnack}
-        setOpenSnack={setOpenSnack}
-      />
+        <div className={`container-produtos ${itens ?? 'ocultar'}`}>
+          {itens && itens.map((item) =>
+            <Card
+              key={item.nome}
+              item={item}
+              onClick={selecionarItem}
+            />
+          )}
+        </div>
+        {itens.length < 1 && (
+          <div className="container-vazio">
+            <img src={IconVazio} alt='carrinho vazio'></img>
+            <span>Desculpe, {selecionado ? 'estamos sem produtos ativos' : 'não há restaurantes ativos na sua região'}</span>
+          </div>
+        )}
+        <Snackbar
+          mensagem={mensagem}
+          openSnack={openSnack}
+          setOpenSnack={setOpenSnack}
+        />
+      </div>
     </div>
   );
 }
