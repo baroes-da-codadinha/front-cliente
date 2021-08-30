@@ -29,6 +29,7 @@ export default function Carrinho({ restaurante, abrirCart, setAbrirCart, setAbri
  
 
   useEffect(() => {
+    setConteudo('vazio');
     function calcularSubtotal() {
       let novoSubtotal = 0;
   
